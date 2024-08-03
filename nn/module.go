@@ -3,7 +3,7 @@ package nn
 import (
   "time"
   "math/rand"
-  "GoML/utils"
+  "github.com/l0g1c0n/GoML/utils"
 )
 
 
