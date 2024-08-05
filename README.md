@@ -23,6 +23,8 @@ import (
     "fmt"
     "github.com/l0g1c0n/GoML/cuda/nn"  // Use this import for CUDA support
     // "github.com/l0g1c0n/GoML/nn"    // Use this import for CPU support
+
+    "github.com/l0g1c0n/GoML/utils" // import utils for activation functions and matrix operations
 )
 
 type network_struct struct {
@@ -34,11 +36,15 @@ type network_struct struct {
 }
 
 func (self *network_struct) Forward(x [][]float64) [][]float64 {
-    x = self.fc1.Forward(x, self.pass)
-    x = self.fc2.Forward(x, self.pass)
-    x = self.fc3.Forward(x, self.pass)
-    x = self.fc4.Forward(x, self.pass)
-    return x
+  
+  x = self.fc1.Forward(x,self.pass)
+  utils.ReLU(&x)
+  x = self.fc2.Forward(x,self.pass)
+  utils.ReLU(&x)
+  x = self.fc3.Forward(x,self.pass)
+  utils.LeakyReLU(&x,0.1)
+  x = self.fc4.Forward(x,self.pass)
+  return x
 }
 
 func Network(input_size, hidden_size, output_size int) network_struct {
