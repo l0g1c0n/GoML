@@ -165,3 +165,94 @@ func VectorMatrixSum(m [][]float64,vector [][]float64) [][]float64 {
   return m 
 }
 
+func ReLU(x *[][]float64) {
+  
+  (*x) = MatOp(x,func(y float64)float64{if y>0{return y}else {return 0}})
+
+}
+
+func Sigmoid(x *[][]float64) {
+  (*x) = MatOp(x,func(y float64)float64{return 1/(1+math.Exp(-y))})
+}
+
+func Tanh(x *[][]float64) {
+  (*x) = MatOp(x, func(y float64) float64 {return math.Tanh(y)})
+}
+
+func LeakyReLU(x *[][]float64, alpha float64) {
+  (*x) = MatOp(x, func(y float64) float64 {if y > 0 {return y} else {return alpha * y}})
+}
+
+func Softmax(x *[][]float64) [][]float64 {
+  rows := len(*x)
+  cols := len((*x)[0])
+
+
+  expMatrix := make([][]float64, rows)
+  for i := range *x {
+    expMatrix[i] = make([]float64, cols)
+    for j := range (*x)[i] {
+      expMatrix[i][j] = math.Exp((*x)[i][j])
+    }
+  }
+  rowSums := make([]float64, rows)
+  for i := range expMatrix {
+    sum := 0.0
+    for _, value := range expMatrix[i] {
+      sum += value
+    }
+    rowSums[i] = sum
+  }
+  for i := range expMatrix {
+    for j := range expMatrix[i] {
+      expMatrix[i][j] /= rowSums[i]
+    }
+  }
+  return expMatrix
+}
+
+func Max(matrix [][]float64) (float64, int, int) {
+    if len(matrix) == 0 || len(matrix[0]) == 0 {
+        return math.NaN(), -1, -1
+    }
+
+    maxVal := math.Inf(-1) 
+    maxRow := -1
+    maxCol := -1
+
+    for i, row := range matrix {
+        for j, value := range row {
+            if value > maxVal {
+                maxVal = value
+                maxRow = i
+                maxCol = j
+            }
+        }
+    }
+
+    return maxVal, maxRow, maxCol
+}
+
+
+func Min(matrix [][]float64) (float64, int, int) {
+    if len(matrix) == 0 || len(matrix[0]) == 0 {
+        return math.NaN(), -1, -1
+    }
+
+    minVal := math.Inf(1) 
+    minRow := -1
+    minCol := -1
+
+    for i, row := range matrix {
+        for j, value := range row {
+            if value < minVal {
+                minVal = value
+                minRow = i
+                minCol = j
+            }
+        }
+    }
+
+    return minVal, minRow, minCol
+}
+
