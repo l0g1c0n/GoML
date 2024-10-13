@@ -7,7 +7,7 @@ GoML is a Go library for machine learning that provides basic tools for building
 To use GoML in your project, you can install it using Go modules. Run the following command:
 
 ```sh
-go get github.com/l0g1c0n/GoML
+go get github.com/l0g1c0n/GoML@v1.0.2
 ```
 
 ## Example Usage
