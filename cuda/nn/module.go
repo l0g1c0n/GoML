@@ -4,7 +4,7 @@ package nn
 import (
   "time"
   "math/rand"
-  "github.com/l0g1c0n/GoML/CudaUtils"
+  "github.com/l0g1c0n/GoML/cuda/utils"
   "github.com/l0g1c0n/GoML/utils"
 )
 
