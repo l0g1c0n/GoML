@@ -36,16 +36,17 @@ type network_struct struct {
 }
 
 func (self *network_struct) Forward(x [][]float64) [][]float64 {
-  
-  x = self.fc1.Forward(x,self.pass)
-  utils.ReLU(&x)
-  x = self.fc2.Forward(x,self.pass)
-  utils.ReLU(&x)
-  x = self.fc3.Forward(x,self.pass)
-  utils.LeakyReLU(&x,0.1)
-  x = self.fc4.Forward(x,self.pass)
-  return x
+    x = self.fc1.Forward(x, self.pass)
+    utils.ReLU(&x)
+    x = self.fc2.Forward(x, self.pass)
+    utils.ReLU(&x)
+    x = self.fc3.Forward(x, self.pass)
+    utils.LeakyReLU(&x, 0.1)
+    x = self.fc4.Forward(x, self.pass)
+    return x
 }
+
+
 
 func Network(input_size, hidden_size, output_size int) network_struct {
     return network_struct{
@@ -57,6 +58,7 @@ func Network(input_size, hidden_size, output_size int) network_struct {
     }
 }
 
+    
 func batchdata(A [][]float64, size int) [][]float64 {
     for _ = range (size - 1) {
         A = append(A, A[0])
@@ -65,10 +67,10 @@ func batchdata(A [][]float64, size int) [][]float64 {
 }
 
 func main() {
-    Net := Network(5, 2048, 5)
+    Net := Network(5, 1024, 5)
     mse := nn.MSELoss{}
     optim := nn.MomentumDescent{}
-    optim.Init(Net.pass, 0.001, 0.09)
+    optim.Init(Net.pass, 0.0001, 0.009) // tune the learning rate. (2nd argument)
 
     matrix := [][]float64{{0.1, 0.2, 0.3, 0.4, 0.5}}
     target := [][]float64{{0.5, 0.4, 0.3, 0.2, 0.5}}
@@ -77,14 +79,15 @@ func main() {
     matrix = batchdata(matrix, BatchSize)
     target = batchdata(target, BatchSize)
 
-    for i := 0; i < 10; i++ {
+    for i := 0; i < 30; i++ {
         output := Net.Forward(matrix)
-        error := mse.Loss(&output, &target)
+        error_ := mse.Loss(&output, &target)
         optim.Step(&mse.Gradients)
 
-        fmt.Println("epoch: ", i, " loss: ", error[0][0])
+        fmt.Println("epoch: ", i, " loss: ", error_[0][0])
     }
 }
+
 ```
 
 ## Core Components
